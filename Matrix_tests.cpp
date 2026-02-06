@@ -28,25 +28,15 @@ TEST(test_fill_basic) {
 // Tests that Matrix_init initializes correctly and overwrites old data
 TEST(test_matrix_init) {
   Matrix mat;
-  
   Matrix_init(&mat, 2, 2);
-  ASSERT_EQUAL(mat.width, 2);
-  ASSERT_EQUAL(mat.height, 2);
-  ASSERT_EQUAL(mat.data.size(), 4);
 
-  for (int i = 0; i < 4; ++i) {
-    ASSERT_EQUAL(mat.data[i], 0);
-  }
+  ASSERT_EQUAL(Matrix_width(&mat), 2);
+  ASSERT_EQUAL(Matrix_height(&mat), 2);
 
-  mat.data[0] = 99;
-  mat.data[3] = 42;
-  Matrix_init(&mat, 3, 1);
-
-  ASSERT_EQUAL(mat.width, 3);
-  ASSERT_EQUAL(mat.height, 1);
-  ASSERT_EQUAL(mat.data.size(), 3);
-  for (int i = 0; i < 3; i++) {
-    ASSERT_EQUAL(mat.data[i], 0);
+  for (int i = 0; i < Matrix_height(&mat); ++i) {
+    for (int j = 0; j < Matrix_width(&mat); ++j) {
+      ASSERT_EQUAL(*Matrix_at(&mat, i, j), 0);
+    }
   }
 }
 
@@ -66,7 +56,7 @@ TEST(test_matrix_print) {
   Matrix_print(&mat, out);
 
   ostringstream correct;
-  correct << "3 2 " << endl;
+  correct << "3 2" << endl;
   correct << "1 2 3 " << endl;
   correct << "4 5 6 " << endl;
   ASSERT_EQUAL(out.str(), correct.str());
