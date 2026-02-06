@@ -10,7 +10,8 @@ using namespace std;
 // -----
 // Fills a 3x5 Matrix with a value and checks
 // that Matrix_at returns that value for each element.
-TEST(test_fill_basic) {
+TEST(test_fill_basic)
+{
   Matrix mat;
   const int width = 3;
   const int height = 5;
@@ -18,30 +19,36 @@ TEST(test_fill_basic) {
   Matrix_init(&mat, 3, 5);
   Matrix_fill(&mat, value);
 
-  for(int r = 0; r < height; ++r){
-    for(int c = 0; c < width; ++c){
+  for (int r = 0; r < height; ++r)
+  {
+    for (int c = 0; c < width; ++c)
+    {
       ASSERT_EQUAL(*Matrix_at(&mat, r, c), value);
     }
   }
 }
 
 // Tests that Matrix_init initializes correctly and overwrites old data
-TEST(test_matrix_init) {
+TEST(test_matrix_init)
+{
   Matrix mat;
   Matrix_init(&mat, 2, 2);
 
   ASSERT_EQUAL(Matrix_width(&mat), 2);
   ASSERT_EQUAL(Matrix_height(&mat), 2);
 
-  for (int i = 0; i < Matrix_height(&mat); ++i) {
-    for (int j = 0; j < Matrix_width(&mat); ++j) {
+  for (int i = 0; i < Matrix_height(&mat); ++i)
+  {
+    for (int j = 0; j < Matrix_width(&mat); ++j)
+    {
       ASSERT_EQUAL(*Matrix_at(&mat, i, j), 0);
     }
   }
 }
 
 // Tests that Matrix_print outputs the correct format
-TEST(test_matrix_print) {
+TEST(test_matrix_print)
+{
   Matrix mat;
   Matrix_init(&mat, 3, 2);
   *Matrix_at(&mat, 0, 0) = 1;
@@ -61,7 +68,8 @@ TEST(test_matrix_print) {
   ASSERT_EQUAL(out.str(), correct.str());
 }
 // Tests that Matrix_width returns the correct width
-TEST(test_matrix_width) {
+TEST(test_matrix_width)
+{
   Matrix mat;
 
   Matrix_init(&mat, 4, 3);
@@ -70,7 +78,8 @@ TEST(test_matrix_width) {
 }
 
 // Tests that Matrix_height returns the correct height
-TEST(test_matrix_height) {
+TEST(test_matrix_height)
+{
   Matrix mat;
 
   Matrix_init(&mat, 5, 4);
@@ -78,7 +87,8 @@ TEST(test_matrix_height) {
   ASSERT_EQUAL(h, 4);
 }
 
-TEST(test_matrix_at) {
+TEST(test_matrix_at)
+{
   Matrix mat;
 
   Matrix_init(&mat, 3, 3);
@@ -92,27 +102,31 @@ TEST(test_matrix_at) {
   ASSERT_EQUAL(*Matrix_at(&mat, 2, 1), -3);
 }
 
-TEST(test_matrix_at_const) {
+TEST(test_matrix_at_const)
+{
   Matrix mat;
   Matrix_init(&mat, 3, 2);
   *Matrix_at(&mat, 1, 2) = 99;
 
-  const Matrix* cmat = &mat;
-  const int* p = Matrix_at(cmat, 1, 2);
+  const Matrix *cmat = &mat;
+  const int *p = Matrix_at(cmat, 1, 2);
   ASSERT_EQUAL(*p, 99);
 
-  int expected_index = 1 * mat.width + 2;
-  ASSERT_EQUAL(p, &mat.data[expected_index]);
+  int *p2 = Matrix_at(&mat, 1, 2);
+  ASSERT_EQUAL((const int *)p2, p);
 }
 
 // Tests Matrix_fill initializes and overwrites all elements correctly
-TEST(test_matrix_fill) {
+TEST(test_matrix_fill)
+{
   Matrix mat;
   Matrix_init(&mat, 3, 2);
   Matrix_fill(&mat, 5);
 
-  for (int i = 0; i < mat.height; ++i) {
-    for (int j = 0; j < mat.width; ++j) {
+  for (int i = 0; i < mat.height; ++i)
+  {
+    for (int j = 0; j < mat.width; ++j)
+    {
       ASSERT_EQUAL(*Matrix_at(&mat, i, j), 5);
     }
   }
@@ -125,40 +139,51 @@ TEST(test_matrix_fill) {
   *Matrix_at(&mat, 1, 2) = 6;
   Matrix_fill(&mat, 0);
 
-  for (int i = 0; i < mat.height; ++i) {
-    for (int j = 0; j < mat.width; ++j) {
+  for (int i = 0; i < Matrix_height(&mat); ++i)
+  {
+    for (int j = 0; j < Matrix_width(&mat); ++j)
+    {
       ASSERT_EQUAL(*Matrix_at(&mat, i, j), 0);
     }
   }
 }
 
-TEST(test_matrix_fill_border) {
+TEST(test_matrix_fill_border)
+{
   Matrix mat1;
   Matrix_init(&mat1, 4, 3);
   Matrix_fill(&mat1, 7);
   Matrix_fill_border(&mat1, 1);
 
-  for (int i = 0; i < mat1.height; ++i) {
-    for (int j = 0; j < mat1.width; ++j) {
-      bool isBorder = (i == 0 || i == mat1.height - 1 ||
-         j == 0 || j == mat1.width - 1);
-      if (isBorder) {
-                ASSERT_EQUAL(*Matrix_at(&mat1, i, j), 1);
+  for (int i = 0; i < Matrix_height(&mat1); ++i)
+  {
+    for (int j = 0; j < Matrix_width(&mat1); ++j)
+    {
+      bool isBorder = (i == 0 || i == Matrix_height(&mat1) - 1 ||
+                       j == 0 || j == Matrix_width(&mat1) - 1);
+      if (isBorder)
+      {
+        ASSERT_EQUAL(*Matrix_at(&mat1, i, j), 1);
       }
-      else {
-                ASSERT_EQUAL(*Matrix_at(&mat1, i, j), 7);
+      else
+      {
+        ASSERT_EQUAL(*Matrix_at(&mat1, i, j), 7);
       }
     }
   }
   Matrix_fill_border(&mat1, 9);
-  for (int i = 0; i < mat1.height; ++i) {
-    for (int j = 0; j < mat1.width; ++j) {
-      bool isBorder = (i == 0 || i == mat1.height - 1 ||
-        j == 0 || j == mat1.width - 1);
-      if (isBorder) {
+  for (int i = 0; i < Matrix_height(&mat1); ++i)
+  {
+    for (int j = 0; j < Matrix_width(&mat1); ++j)
+    {
+      bool isBorder = (i == 0 || i == Matrix_height(&mat1) - 1 ||
+                       j == 0 || j == Matrix_width(&mat1) - 1);
+      if (isBorder)
+      {
         ASSERT_EQUAL(*Matrix_at(&mat1, i, j), 9);
       }
-      else {
+      else
+      {
         ASSERT_EQUAL(*Matrix_at(&mat1, i, j), 7);
       }
     }
@@ -174,7 +199,8 @@ TEST(test_matrix_fill_border) {
   Matrix_init(&mat3, 5, 1);
   Matrix_fill(&mat3, 2);
   Matrix_fill_border(&mat3, 6);
-  for (int i = 0; i < mat3.width; ++i) {
+  for (int i = 0; i < Matrix_width(&mat3); ++i)
+  {
     ASSERT_EQUAL(*Matrix_at(&mat3, 0, i), 6);
   }
 
@@ -182,12 +208,14 @@ TEST(test_matrix_fill_border) {
   Matrix_init(&mat4, 1, 5);
   Matrix_fill(&mat4, 3);
   Matrix_fill_border(&mat4, 7);
-  for (int i = 0; i < mat4.height; ++i) {
+  for (int i = 0; i < Matrix_height(&mat4); ++i)
+  {
     ASSERT_EQUAL(*Matrix_at(&mat4, i, 0), 7);
   }
 }
 
-TEST(test_matrix_max) {
+TEST(test_matrix_max)
+{
   Matrix mat1;
   Matrix_init(&mat1, 3, 2);
   *Matrix_at(&mat1, 0, 0) = 1;
@@ -223,8 +251,8 @@ TEST(test_matrix_max) {
   ASSERT_EQUAL(Matrix_max(&mat5), 99);
 }
 
-
-TEST(test_matrix_column_of_min_value_in_row) {
+TEST(test_matrix_column_of_min_value_in_row)
+{
   Matrix mat;
   Matrix_init(&mat, 6, 3);
   *Matrix_at(&mat, 0, 0) = 5;
@@ -241,7 +269,8 @@ TEST(test_matrix_column_of_min_value_in_row) {
   *Matrix_at(&mat, 1, 4) = -9;
   *Matrix_at(&mat, 1, 5) = 0;
 
-  for (int c = 0; c < 6; ++c) {
+  for (int c = 0; c < 6; ++c)
+  {
     *Matrix_at(&mat, 2, c) = 3;
   }
 
@@ -253,7 +282,8 @@ TEST(test_matrix_column_of_min_value_in_row) {
   ASSERT_EQUAL(Matrix_column_of_min_value_in_row(&mat, 2, 2, 5), 2);
 }
 
-TEST(test_matrix_min_value_in_row) {
+TEST(test_matrix_min_value_in_row)
+{
   Matrix mat;
   Matrix_init(&mat, 6, 3);
 
@@ -271,7 +301,8 @@ TEST(test_matrix_min_value_in_row) {
   *Matrix_at(&mat, 1, 4) = -9;
   *Matrix_at(&mat, 1, 5) = 0;
 
-  for (int c = 0; c < 6; ++c) {
+  for (int c = 0; c < 6; ++c)
+  {
     *Matrix_at(&mat, 2, c) = 3;
   }
 
