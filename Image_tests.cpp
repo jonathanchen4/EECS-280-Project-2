@@ -113,11 +113,11 @@ TEST(test_image_print) {
   Image_print(&img, out);
   
   ostringstream correct;
-  correct << "P3\n";
-  correct << "2 2\n";
-  correct << "255\n";
-  correct << "255 0 0 0 255 0 \n";
-  correct << "0 0 255 255 255 255 \n";
+  correct << "P3" << endl;
+  correct << "2 2" << endl;
+  correct << "255" << endl;
+  correct << "255 0 0 0 255 0 " << endl;
+  correct << "0 0 255 255 255 255 " << endl;
 
   ASSERT_EQUAL(out.str(), correct.str());
 }
@@ -192,8 +192,8 @@ TEST(test_image_fill_basic) {
   Pixel gray = {100, 100, 100};
   Image_fill(&img, gray);
 
-  for (int i = 0; i < Image_height(&img); i++) {
-    for (int j = 0; j < Image_width(&img); j++) {
+  for (int i = 0; i < Image_height(&img); ++i) {
+    for (int j = 0; j < Image_width(&img); ++j) {
       Pixel p = Image_get_pixel(&img, i, j);
       ASSERT_EQUAL(p.r, 100);
       ASSERT_EQUAL(p.g, 100);

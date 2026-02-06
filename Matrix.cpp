@@ -9,10 +9,10 @@ using namespace std;
 // EFFECTS:  Initializes *mat as a Matrix with the given width and height,
 //           with all elements initialized to 0.
 void Matrix_init(Matrix* mat, int width, int height) {
-  mat -> width = width;
-  mat -> height = height;
-
-  mat -> data.assign(width * height, 0);
+  mat->width = width;
+  mat->height = height;
+  long long count = (long long)width * (long long)height;
+  mat->data.assign(count, 0);
 }
 
 // REQUIRES: mat points to a valid Matrix
@@ -57,7 +57,7 @@ int Matrix_height(const Matrix* mat) {
 //           at the given row and column.
 int* Matrix_at(Matrix* mat, int row, int column) {
   int w = mat->width;
-  int index = row * w + column;
+  long long index = (long long)row * (long long)w + (long long)column;
   return &mat -> data[index];
 }
 
@@ -68,8 +68,8 @@ int* Matrix_at(Matrix* mat, int row, int column) {
 // EFFECTS:  Returns a pointer-to-const to the element in
 //           the Matrix at the given row and column.
 const int* Matrix_at(const Matrix* mat, int row, int column) {
-    int w = mat->width;
-  int index = row * w + column;
+  int w = mat->width;
+  long long index = (long long)row * (long long)w + (long long)column;
   return &mat -> data[index];
 }
 
