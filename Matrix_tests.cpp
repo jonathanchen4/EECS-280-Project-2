@@ -43,25 +43,23 @@ TEST(test_matrix_init) {
 // Tests that Matrix_print outputs the correct format
 TEST(test_matrix_print) {
   Matrix mat;
-  Matrix_init(&mat, 3, 2); 
+  Matrix_init(&mat, 3, 2);
+  *Matrix_at(&mat, 0, 0) = 1;
+  *Matrix_at(&mat, 0, 1) = 2;
+  *Matrix_at(&mat, 0, 2) = 3;
+  *Matrix_at(&mat, 1, 0) = 4;
+  *Matrix_at(&mat, 1, 1) = 5;
+  *Matrix_at(&mat, 1, 2) = 6;
 
-  mat.data[0] = 1;
-  mat.data[1] = 2;
-  mat.data[2] = 3;
-  mat.data[3] = 4;
-  mat.data[4] = 5;
-  mat.data[5] = 6;
-
-  ostringstream out;
+  std::ostringstream out;
   Matrix_print(&mat, out);
 
-  ostringstream correct;
-  correct << "3 2" << endl;
-  correct << "1 2 3 " << endl;
-  correct << "4 5 6 " << endl;
+  std::ostringstream correct;
+  correct << "3 2\n";
+  correct << "1 2 3 \n";
+  correct << "4 5 6 \n";
   ASSERT_EQUAL(out.str(), correct.str());
 }
-
 // Tests that Matrix_width returns the correct width
 TEST(test_matrix_width) {
   Matrix mat;

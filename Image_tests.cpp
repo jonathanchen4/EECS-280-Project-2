@@ -14,7 +14,8 @@ using namespace std;
 // -----
 // Sets various pixels in a 2x2 Image and checks
 // that Image_print produces the correct output.
-TEST(test_print_basic) {
+TEST(test_print_basic)
+{
   Image img;
   const Pixel red = {255, 0, 0};
   const Pixel green = {0, 255, 0};
@@ -41,9 +42,10 @@ TEST(test_print_basic) {
 
 // Tests that Image_init correctly sets width/height
 // and initializes all pixels to black (0,0,0)
-TEST(test_image_init) {
+TEST(test_image_init)
+{
   Image img;
-  
+
   Image_init(&img, 3, 2);
 
   ASSERT_EQUAL(Image_width(&img), 3);
@@ -51,8 +53,10 @@ TEST(test_image_init) {
 
   Pixel black = {0, 0, 0};
 
-  for (int i = 0; i < Image_height(&img); ++i) {
-    for (int j = 0; j < Image_width(&img); ++j) {
+  for (int i = 0; i < Image_height(&img); ++i)
+  {
+    for (int j = 0; j < Image_width(&img); ++j)
+    {
       Pixel p = Image_get_pixel(&img, i, j);
       ASSERT_EQUAL(p.r, black.r);
       ASSERT_EQUAL(p.g, black.g);
@@ -61,46 +65,52 @@ TEST(test_image_init) {
   }
 }
 
-//tests that image_init correctly itializes the image
-// by reading in PPM format
-TEST(test_image_init_PPM) {
-  stringstream ss;
-  ss << "P3\n";
-  ss << "2 2\n";
-  ss << "255\n";
-  ss << "255 0 0   0 255 0\n";
-  ss << "0 0 255   255 255 255\n";
+// tests that image_init correctly itializes the image
+//  by reading in PPM format
+TEST(test_image_init_PPM)
+{
+  istringstream input(
+      "P3\n"
+      "2 2\n"
+      "255\n"
+      "255 0 0  0 255 0\n"
+      "0 0 255  255 255 255\n");
 
   Image img;
-  Image_init(&img, ss);
+  Image_init(&img, input);
 
-  ASSERT_EQUAL(img.width, 2);
-  ASSERT_EQUAL(img.height, 2);
+  ASSERT_EQUAL(Image_width(&img), 2);
+  ASSERT_EQUAL(Image_height(&img), 2);
 
-  ASSERT_EQUAL(*Matrix_at(&img.red_channel, 0, 0), 255);
-  ASSERT_EQUAL(*Matrix_at(&img.green_channel, 0, 0), 0);
-  ASSERT_EQUAL(*Matrix_at(&img.blue_channel, 0, 0), 0);
+  Pixel p = Image_get_pixel(&img, 0, 0);
+  ASSERT_EQUAL(p.r, 255);
+  ASSERT_EQUAL(p.g, 0);
+  ASSERT_EQUAL(p.b, 0);
 
-  ASSERT_EQUAL(*Matrix_at(&img.red_channel, 0, 1), 0);
-  ASSERT_EQUAL(*Matrix_at(&img.green_channel, 0, 1), 255);
-  ASSERT_EQUAL(*Matrix_at(&img.blue_channel, 0, 1), 0);
+  p = Image_get_pixel(&img, 0, 1);
+  ASSERT_EQUAL(p.r, 0);
+  ASSERT_EQUAL(p.g, 255);
+  ASSERT_EQUAL(p.b, 0);
 
-  ASSERT_EQUAL(*Matrix_at(&img.red_channel, 1, 0), 0);
-  ASSERT_EQUAL(*Matrix_at(&img.green_channel, 1, 0), 0);
-  ASSERT_EQUAL(*Matrix_at(&img.blue_channel, 1, 0), 255);
+  p = Image_get_pixel(&img, 1, 0);
+  ASSERT_EQUAL(p.r, 0);
+  ASSERT_EQUAL(p.g, 0);
+  ASSERT_EQUAL(p.b, 255);
 
-  ASSERT_EQUAL(*Matrix_at(&img.red_channel, 1, 1), 255);
-  ASSERT_EQUAL(*Matrix_at(&img.green_channel, 1, 1), 255);
-  ASSERT_EQUAL(*Matrix_at(&img.blue_channel, 1, 1), 255);
+  p = Image_get_pixel(&img, 1, 1);
+  ASSERT_EQUAL(p.r, 255);
+  ASSERT_EQUAL(p.g, 255);
+  ASSERT_EQUAL(p.b, 255);
 }
 
 // Tests that Image_print outputs a correct P3 PPM file
 // with proper header, spacing, and pixel order.
-TEST(test_image_print) {
+TEST(test_image_print)
+{
   Image img;
-  Pixel red   = {255, 0, 0};
+  Pixel red = {255, 0, 0};
   Pixel green = {0, 255, 0};
-  Pixel blue  = {0, 0, 255};
+  Pixel blue = {0, 0, 255};
   Pixel white = {255, 255, 255};
   Image_init(&img, 2, 2);
 
@@ -111,7 +121,7 @@ TEST(test_image_print) {
 
   ostringstream out;
   Image_print(&img, out);
-  
+
   ostringstream correct;
   correct << "P3" << endl;
   correct << "2 2" << endl;
@@ -123,7 +133,8 @@ TEST(test_image_print) {
 }
 
 // Tests that Image_width returns the correct height after initialization
-TEST(test_image_width) {
+TEST(test_image_width)
+{
   Image img;
 
   Image_init(&img, 1, 1);
@@ -137,8 +148,9 @@ TEST(test_image_width) {
 }
 
 // Tests that Image_height returns the correct height after initialization
-TEST(test_image_height) {
- Image img;
+TEST(test_image_height)
+{
+  Image img;
 
   Image_init(&img, 1, 1);
   ASSERT_EQUAL(Image_height(&img), 1);
@@ -151,7 +163,8 @@ TEST(test_image_height) {
 }
 
 // Tests that Image_get_pixel returns the correct Pixel values
-TEST(test_image_get_pixel) {
+TEST(test_image_get_pixel)
+{
   Image img;
 
   Image_init(&img, 2, 2);
@@ -171,9 +184,10 @@ TEST(test_image_get_pixel) {
 }
 
 // Tests that Image_set_pixel correctly sets RGB values
-TEST(test_image_set_pixel) {
+TEST(test_image_set_pixel)
+{
   Image img;
-  
+
   Image_init(&img, 2, 2);
   Pixel purple = {128, 0, 128};
   Image_set_pixel(&img, 0, 1, purple);
@@ -185,15 +199,18 @@ TEST(test_image_set_pixel) {
 }
 
 // Tests that Image_fill sets all pixels to the same color
-TEST(test_image_fill_basic) {
+TEST(test_image_fill_basic)
+{
   Image img;
-  
+
   Image_init(&img, 3, 2);
   Pixel gray = {100, 100, 100};
   Image_fill(&img, gray);
 
-  for (int i = 0; i < Image_height(&img); ++i) {
-    for (int j = 0; j < Image_width(&img); ++j) {
+  for (int i = 0; i < Image_height(&img); ++i)
+  {
+    for (int j = 0; j < Image_width(&img); ++j)
+    {
       Pixel p = Image_get_pixel(&img, i, j);
       ASSERT_EQUAL(p.r, 100);
       ASSERT_EQUAL(p.g, 100);
