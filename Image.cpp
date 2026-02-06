@@ -29,25 +29,26 @@ Matrix_fill(&img -> blue_channel, 0);
 //           from the given input stream.
 // NOTE:     See the project spec for a discussion of PPM format.
 void Image_init(Image* img, std::istream& is) {
-  char magic[3];
-  int width, height, maxVal;
+  string magic;
+  int width = 0, height = 0, maxVal = 0;
+  is >> magic >> width >> height >> maxVal;
 
-  img -> width = width;
-  img -> height = height;
+  assert(magic == "P3");
+  assert(width > 0);
+  assert(height > 0);
+  assert(maxVal == 255);
 
-  Matrix_init(&img->red_channel, width, height);
-  Matrix_init(&img->green_channel, width, height);
-  Matrix_init(&img->blue_channel, width, height);
+  Image_init(img, width, height);
 
   for (int i = 0; i < height; ++i) {
-    for (int j = 0; i < width; ++j) {
-      int R, G, B;
-      is >> R >> G >> B;
-      *Matrix_at(&img->red_channel, i, j) = R;
-      *Matrix_at(&img->green_channel, i, j) = G;
-      *Matrix_at(&img->blue_channel, i, j) = B;
+    for (int j = 0; j < width; ++j) {
+      int r, g, b;
+      is >> r >> g >> b;
+      *Matrix_at(&img->red_channel, i, j) = r;
+      *Matrix_at(&img->green_channel, i, j) = g;
+      *Matrix_at(&img->blue_channel, i, j) = b;
+        }
     }
-  }
 }
 
 
